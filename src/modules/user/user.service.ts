@@ -1,8 +1,7 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "../../lib/prisma";
 import config from "../../config";
-import { Role } from "../../../generated/prisma/enums";
-import { RegisterUserPayload } from "./auth.interface";
+import { RegisterUserPayload } from "./user.interface";
 
 const registerUserIntoDB = async (payload: RegisterUserPayload) => {
   const { name, email, password, role } = payload;
@@ -14,7 +13,7 @@ const registerUserIntoDB = async (payload: RegisterUserPayload) => {
   });
 
   if (isUserExist) {
-    throw new Error("User with this wmail already exists");
+    throw new Error("User with this email already exists");
   }
 
   // Password Hash
@@ -31,18 +30,21 @@ const registerUserIntoDB = async (payload: RegisterUserPayload) => {
       password: hashedPassword,
       role,
     },
-  });
-
-  const user = await prisma.user.findUnique({
-    where: {
-      id: createdUser.id,
-      email: createdUser.email || email,
-    },
     omit: {
       password: true,
     },
   });
-  return user;
+
+  //   const user = await prisma.user.findUnique({
+  //     where: {
+  //       id: createdUser.id,
+  //       email: createdUser.email || email,
+  //     },
+  //     omit: {
+  //       password: true,
+  //     },
+  //   });
+  return createdUser;
 };
 
 export const userService = {
