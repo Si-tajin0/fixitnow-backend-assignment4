@@ -1,8 +1,10 @@
 import cookieParser from "cookie-parser";
-import express, { Application, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import config from "./config";
 import { userRoutes } from "./modules/user/user.route";
+import { notFound } from "./middlewares/notFound";
+import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 
 const app: Application = express();
 
@@ -22,5 +24,11 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/users", userRoutes);
+
+//  Not Found Route
+app.use(notFound);
+
+// Global Error Handler Route
+app.use(globalErrorHandler);
 
 export default app;
