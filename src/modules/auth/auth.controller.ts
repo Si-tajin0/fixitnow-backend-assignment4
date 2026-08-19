@@ -3,14 +3,12 @@ import { catchAsync } from "../../utitls/catchAsync";
 import { authService } from "./auth.service";
 import { sendResponse } from "../../utitls/sendResponse";
 import httpStatus from "http-status";
-import config from "../../config";
-import { jwtUtils } from "../../utitls/jwt";
 
 // Register User
-const registerCustomer = catchAsync(
+const registerUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
-    const user = await authService.registerCustomerIntoDB(payload);
+    const user = await authService.registerFormDB(payload);
 
     sendResponse(res, {
       success: true,
@@ -24,10 +22,10 @@ const registerCustomer = catchAsync(
 );
 
 // Login User
-const loginCustomer = catchAsync(
+const loginUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
-    const loginResult = await authService.loginCustomer(payload);
+    const loginResult = await authService.loginFromDB(payload);
 
     const { accessToken, refreshToken, user } = loginResult;
 
@@ -57,23 +55,11 @@ const loginCustomer = catchAsync(
 );
 
 //  Get Customer Profile
-const getCustomerProfile = catchAsync(
+const getMyProfile = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { accessToken } = req.cookies;
-    console.log(accessToken);
+    const userId = req.user.id;
 
-    const verifiedToken = jwtUtils.verifyToken(
-      accessToken,
-      config.jwt_access_secret,
-    );
-
-    if (typeof verifiedToken === "string") {
-      throw new Error(verifiedToken);
-    }
-
-    const profile = await authService.getCustomerProfileFromDB(
-      verifiedToken.id,
-    );
+    const profile = await authService.getMyProfileFromDB(userId);
 
     sendResponse(res, {
       success: true,
@@ -85,7 +71,7 @@ const getCustomerProfile = catchAsync(
 );
 
 export const authController = {
-  registerCustomer,
-  loginCustomer,
-  getCustomerProfile,
+  registerUser,
+  loginUser,
+  getMyProfile,
 };

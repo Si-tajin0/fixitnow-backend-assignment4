@@ -1,12 +1,18 @@
-import { Router } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { authController } from "./auth.controller";
+import { Role } from "../../../generated/prisma/enums";
+import { auth } from "../../middlewares/auth";
 
 const router = Router();
 
-router.post("/register", authController.registerCustomer);
+router.post("/register", authController.registerUser);
 
-router.post("/login", authController.loginCustomer);
+router.post("/login", authController.loginUser);
 
-router.get("/me", authController.getCustomerProfile);
+router.get(
+  "/me",
+  auth("ADMIN", "CUSTOMER", "TECHNICIAN"),
+  authController.getMyProfile,
+);
 
 export const authRoutes = router;

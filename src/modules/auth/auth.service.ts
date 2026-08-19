@@ -3,10 +3,12 @@ import { prisma } from "../../lib/prisma";
 import config from "../../config";
 import { jwtUtils } from "../../utitls/jwt";
 import { RegisterCustomerPayload, TLoginCustomer } from "./auth.interface";
+import { create } from "node:domain";
 
 // Create Register User
-const registerCustomerIntoDB = async (payload: RegisterCustomerPayload) => {
-  const { name, email, password, role } = payload;
+const registerFormDB = async (payload: RegisterCustomerPayload) => {
+  const { name, email, password, role, phone, address, technicianProfile } =
+    payload;
   // Check this email before the account created
   const isUserExist = await prisma.user.findUnique({
     where: {
@@ -31,9 +33,29 @@ const registerCustomerIntoDB = async (payload: RegisterCustomerPayload) => {
       email,
       password: hashedPassword,
       role,
+      phone,
+      address,
+      // nested write for technichian profile
+      ...(role === "TECHNICIAN" && technicianProfile
+        ? {
+            technicianProfile: {
+              create: {
+                skills: technicianProfile.skills,
+                experience: technicianProfile.experience,
+                pricing: technicianProfile.pricing,
+              },
+            },
+          }
+        : {}),
     },
-    omit: {
-      password: true,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      phone: true,
+      address: true,
+      technicianProfile: true,
     },
   });
 
@@ -50,7 +72,7 @@ const registerCustomerIntoDB = async (payload: RegisterCustomerPayload) => {
 };
 
 // Create Login User
-const loginCustomer = async (payload: TLoginCustomer) => {
+const loginFromDB = async (payload: TLoginCustomer) => {
   // check if the user is in the database.
   const user = await prisma.user.findUniqueOrThrow({
     where: {
@@ -102,7 +124,7 @@ const loginCustomer = async (payload: TLoginCustomer) => {
 };
 
 // Create Get My Profile
-const getCustomerProfileFromDB = async (userId: string) => {
+const getMyProfileFromDB = async (userId: string) => {
   const user = await prisma.user.findUniqueOrThrow({
     where: {
       id: userId,
@@ -115,7 +137,7 @@ const getCustomerProfileFromDB = async (userId: string) => {
 };
 
 export const authService = {
-  loginCustomer,
-  registerCustomerIntoDB,
-  getCustomerProfileFromDB,
+  loginFromDB,
+  registerFormDB,
+  getMyProfileFromDB,
 };
