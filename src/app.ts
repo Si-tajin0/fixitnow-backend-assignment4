@@ -2,7 +2,6 @@ import cookieParser from "cookie-parser";
 import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import config from "./config";
-import { userRoutes } from "./modules/user/user.route";
 import { notFound } from "./middlewares/notFound";
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import { authRoutes } from "./modules/auth/auth.routes";
@@ -24,7 +23,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-app.use("/api/users", userRoutes);
+app.use("/api/auth/", authRoutes);
 app.use("/api/auth/", authRoutes);
 
 //  Not Found Route

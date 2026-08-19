@@ -1,10 +1,55 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "../../lib/prisma";
-import { TLoginUser } from "./auth.interface";
-import jwt, { SignOptions } from "jsonwebtoken";
+import { RegisterUserPayload, TLoginUser } from "./auth.interface";
 import config from "../../config";
 import { jwtUtils } from "../../utitls/jwt";
 
+// Create Register User
+const registerUserIntoDB = async (payload: RegisterUserPayload) => {
+  const { name, email, password, role } = payload;
+  // Check this email before the account created
+  const isUserExist = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (isUserExist) {
+    throw new Error("User with this email already exists");
+  }
+
+  // Password Hash
+  const hashedPassword = await bcrypt.hash(
+    password,
+    Number(config.bcrypt_salt_rounds),
+  );
+
+  // Created User Database
+  const createdUser = await prisma.user.create({
+    data: {
+      name,
+      email,
+      password: hashedPassword,
+      role,
+    },
+    omit: {
+      password: true,
+    },
+  });
+
+  //   const user = await prisma.user.findUnique({
+  //     where: {
+  //       id: createdUser.id,
+  //       email: createdUser.email || email,
+  //     },
+  //     omit: {
+  //       password: true,
+  //     },
+  //   });
+  return createdUser;
+};
+
+// Create Login User
 const loginUser = async (payload: TLoginUser) => {
   // check if the user is in the database.
   const user = await prisma.user.findUniqueOrThrow({
@@ -58,4 +103,5 @@ const loginUser = async (payload: TLoginUser) => {
 
 export const authService = {
   loginUser,
+  registerUserIntoDB,
 };

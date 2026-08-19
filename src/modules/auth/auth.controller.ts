@@ -3,7 +3,28 @@ import { catchAsync } from "../../utitls/catchAsync";
 import { authService } from "./auth.service";
 import { sendResponse } from "../../utitls/sendResponse";
 import httpStatus from "http-status";
+import jwt from "jsonwebtoken";
+import config from "../../config";
+import { jwtUtils } from "../../utitls/jwt";
 
+// Register User
+const registerUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const payload = req.body;
+    const user = await authService.registerUserIntoDB(payload);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "User registered successfully",
+      data: {
+        user,
+      },
+    });
+  },
+);
+
+// Login User
 const loginUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
@@ -36,6 +57,25 @@ const loginUser = catchAsync(
   },
 );
 
+//  Get My Profile
+const getMyProfile = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { accessToken } = req.cookies;
+    console.log(accessToken);
+
+    const verifiedToken = jwtUtils.verifyToken(
+      accessToken,
+      config.jwt_access_secret,
+    );
+
+    console.log(verifiedToken);
+
+    res.send("Get My Profile");
+  },
+);
+
 export const authController = {
+  registerUser,
   loginUser,
+  getMyProfile,
 };
