@@ -9,11 +9,29 @@ const loginUser = catchAsync(
     const payload = req.body;
     const loginResult = await authService.loginUser(payload);
 
+    const { accessToken, refreshToken, user } = loginResult;
+
+    // Access Token cookie
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24, // 24 hour or 1 day
+    });
+
+    // Refresh Token cookie
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7day
+    });
+
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "User logged in Successfully! ",
-      data: loginResult,
+      data: { accessToken, refreshToken, user },
     });
   },
 );
