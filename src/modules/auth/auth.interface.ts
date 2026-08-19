@@ -1,6 +1,6 @@
 import { Role } from "../../../generated/prisma/enums";
 
-export interface RegisterUserPayload {
+export interface RegisterCustomerPayload {
   name: string;
   email: string;
   password: string;
@@ -9,7 +9,7 @@ export interface RegisterUserPayload {
   address?: string;
 }
 
-export type TLoginUser = {
+export type TLoginCustomer = {
   email: string;
   password: string;
 };

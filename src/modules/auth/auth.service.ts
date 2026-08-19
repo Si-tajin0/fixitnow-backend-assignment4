@@ -1,11 +1,11 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "../../lib/prisma";
-import { RegisterUserPayload, TLoginUser } from "./auth.interface";
 import config from "../../config";
 import { jwtUtils } from "../../utitls/jwt";
+import { RegisterCustomerPayload, TLoginCustomer } from "./auth.interface";
 
 // Create Register User
-const registerUserIntoDB = async (payload: RegisterUserPayload) => {
+const registerCustomerIntoDB = async (payload: RegisterCustomerPayload) => {
   const { name, email, password, role } = payload;
   // Check this email before the account created
   const isUserExist = await prisma.user.findUnique({
@@ -50,7 +50,7 @@ const registerUserIntoDB = async (payload: RegisterUserPayload) => {
 };
 
 // Create Login User
-const loginUser = async (payload: TLoginUser) => {
+const loginCustomer = async (payload: TLoginCustomer) => {
   // check if the user is in the database.
   const user = await prisma.user.findUniqueOrThrow({
     where: {
@@ -101,7 +101,21 @@ const loginUser = async (payload: TLoginUser) => {
   };
 };
 
+// Create Get My Profile
+const getCustomerProfileFromDB = async (userId: string) => {
+  const user = await prisma.user.findUniqueOrThrow({
+    where: {
+      id: userId,
+    },
+    omit: {
+      password: true,
+    },
+  });
+  return user;
+};
+
 export const authService = {
-  loginUser,
-  registerUserIntoDB,
+  loginCustomer,
+  registerCustomerIntoDB,
+  getCustomerProfileFromDB,
 };

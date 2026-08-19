@@ -3,15 +3,14 @@ import { catchAsync } from "../../utitls/catchAsync";
 import { authService } from "./auth.service";
 import { sendResponse } from "../../utitls/sendResponse";
 import httpStatus from "http-status";
-import jwt from "jsonwebtoken";
 import config from "../../config";
 import { jwtUtils } from "../../utitls/jwt";
 
 // Register User
-const registerUser = catchAsync(
+const registerCustomer = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
-    const user = await authService.registerUserIntoDB(payload);
+    const user = await authService.registerCustomerIntoDB(payload);
 
     sendResponse(res, {
       success: true,
@@ -25,10 +24,10 @@ const registerUser = catchAsync(
 );
 
 // Login User
-const loginUser = catchAsync(
+const loginCustomer = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
-    const loginResult = await authService.loginUser(payload);
+    const loginResult = await authService.loginCustomer(payload);
 
     const { accessToken, refreshToken, user } = loginResult;
 
@@ -57,8 +56,8 @@ const loginUser = catchAsync(
   },
 );
 
-//  Get My Profile
-const getMyProfile = catchAsync(
+//  Get Customer Profile
+const getCustomerProfile = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { accessToken } = req.cookies;
     console.log(accessToken);
@@ -68,14 +67,25 @@ const getMyProfile = catchAsync(
       config.jwt_access_secret,
     );
 
-    console.log(verifiedToken);
+    if (typeof verifiedToken === "string") {
+      throw new Error(verifiedToken);
+    }
 
-    res.send("Get My Profile");
+    const profile = await authService.getCustomerProfileFromDB(
+      verifiedToken.id,
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "User profile retrieved successfully",
+      data: { profile },
+    });
   },
 );
 
 export const authController = {
-  registerUser,
-  loginUser,
-  getMyProfile,
+  registerCustomer,
+  loginCustomer,
+  getCustomerProfile,
 };
