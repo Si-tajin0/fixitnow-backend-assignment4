@@ -5,8 +5,10 @@ import config from "./config";
 import { notFound } from "./middlewares/notFound";
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import { authRoutes } from "./modules/auth/auth.routes";
+import { categoryRoutes } from "./modules/category/category.route";
 
 const app: Application = express();
+
 
 app.use(
   cors({
@@ -23,8 +25,11 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
+//Authentication Route
 app.use("/api/auth/", authRoutes);
-app.use("/api/auth/", authRoutes);
+
+//Admin Category Route
+app.use("/api/admin/", categoryRoutes);
 
 //  Not Found Route
 app.use(notFound);

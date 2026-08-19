@@ -12,6 +12,7 @@ model User {
 
   //Relation
   technicianProfile TecnicianProfile?
+  servicesAsTech    Service[]         @relation("TechnicianServices")
 
   @@map("users")
 }

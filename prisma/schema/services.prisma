@@ -1,0 +1,12 @@
+model Service {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  price       Float
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  technicianId String
+  technician   User   @relation("TechnicianServices", fields: [technicianId], references: [id])
+}
