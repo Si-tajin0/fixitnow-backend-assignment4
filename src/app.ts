@@ -1,5 +1,5 @@
 import cookieParser from "cookie-parser";
-import express, { Application, NextFunction, Request, Response } from "express";
+import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import config from "./config";
 import { notFound } from "./middlewares/notFound";
@@ -8,6 +8,7 @@ import { authRoutes } from "./modules/auth/auth.routes";
 import { categoryRoutes } from "./modules/category/category.route";
 import { serviceRoutes } from "./modules/service/service.route";
 import { technicianRoutes } from "./modules/technician/technician.route";
+import { bookingRoutes } from "./modules/booking/booking.route";
 
 const app: Application = express();
 
@@ -37,6 +38,9 @@ app.use("/api/", serviceRoutes);
 
 // Technician Route
 app.use("/api/", technicianRoutes);
+
+// Booking Route
+app.use("/api/", bookingRoutes);
 
 //  Not Found Route
 app.use(notFound);

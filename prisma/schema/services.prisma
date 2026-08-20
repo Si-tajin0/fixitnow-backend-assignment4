@@ -9,4 +9,6 @@ model Service {
 
   technicianId String
   technician   User   @relation("TechnicianServices", fields: [technicianId], references: [id])
+
+  bookings Booking[]
 }
