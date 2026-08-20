@@ -25,6 +25,39 @@ const createNewBookingIntoDB = async (
   return result;
 };
 
+// Get My Booking
+const getMyBookingsFromDB = async (userId: string, role: string) => {
+  const whereConditions =
+    role === "CUSTOMER"
+      ? { customerId: userId }
+      : {
+          technicianId: userId,
+        };
+
+  const result = await prisma.booking.findMany({
+    where: whereConditions,
+    include: {
+      service: true,
+      customer: {
+        select: {
+          name: true,
+          phone: true,
+          address: true,
+        },
+      },
+      technician: {
+        select: {
+          name: true,
+          phone: true,
+        },
+      },
+    },
+    orderBy: { creatdAt: "desc" },
+  });
+  return result;
+};
+
 export const bookingService = {
   createNewBookingIntoDB,
+  getMyBookingsFromDB,
 };
