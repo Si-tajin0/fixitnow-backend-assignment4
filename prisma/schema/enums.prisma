@@ -11,6 +11,7 @@ enum BookingStatus {
   IN_PROGRESS
   COMPLETED
   DECLINED
+  CANCELLED
 }
 
 enum UserStatus {

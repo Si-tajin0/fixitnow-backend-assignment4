@@ -55,8 +55,47 @@ const updateBookingStatus = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// Get specific Booking id
+const getBookingById = catchAsync(async (req: Request, res: Response) => {
+  const bookingId = req.params.id as string;
+  const { id: userId, role } = req.user;
+
+  const result = await bookingService.getBookingByIdFromDB(
+    bookingId,
+    userId,
+    role,
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Booking details retrieved successfully",
+    data: result,
+  });
+});
+
+// Cancel Booking
+const cancelBooking = catchAsync(async (req: Request, res: Response) => {
+  const bookingId = req.params.id as string;
+  const customerId = req.user.id as string;
+
+  const result = await bookingService.cancelBookingIntoDB(
+    bookingId,
+    customerId,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Booking cancelled successfully",
+    data: result,
+  });
+});
+
 export const bookingController = {
   createBooking,
   getMyBookings,
   updateBookingStatus,
+  getBookingById,
+  cancelBooking,
 };

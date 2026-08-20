@@ -43,7 +43,7 @@ app.use("/api/", serviceRoutes);
 app.use("/api/", technicianRoutes);
 
 // Booking Route
-app.use("/api/", bookingRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 // Technician Updte Route
 app.use("/api/technician/bookings/", technicianBookingRoutes);

@@ -7,9 +7,19 @@ const router = Router();
 router.post("/bookings", auth("CUSTOMER"), bookingController.createBooking);
 
 router.get(
-  "/bookings",
+  "/",
   auth("CUSTOMER", "TECHNICIAN"),
   bookingController.getMyBookings,
 );
 
+// Specific Booking Id Details
+router.get(
+  "/:id",
+  auth("CUSTOMER", "TECHNICIAN"),
+  bookingController.getBookingById,
+);
+
+// Cancel Booking (Only Customer)
+
+router.patch("/:id/cancel", auth("CUSTOMER"), bookingController.cancelBooking);
 export const bookingRoutes = router;

@@ -84,8 +84,58 @@ const updateBookingStatusIntoDB = async (
   return result;
 };
 
+// Get Booking Id
+const getBookingByIdFromDB = async (
+  bookingId: string,
+  userId: string,
+  role: string,
+) => {
+  const booking = await prisma.booking.findUniqueOrThrow({
+    where: { id: bookingId },
+    include: {
+      service: true,
+      customer: { select: { name: true, phone: true, address: true } },
+      technician: { select: { name: true, phone: true } },
+    },
+  });
+
+  if (role === "CUSTOMER" && booking.customerId !== userId) {
+    throw new Error("Forbidden! This is not your booking.");
+  }
+
+  if (role === "TECHNICIAN" && booking.technicianId !== userId) {
+    throw new Error("Forbidden! This is not your assigned booking.");
+  }
+  return booking;
+};
+
+// Customer cancel the booking
+const cancelBookingIntoDB = async (bookingId: string, customerId: string) => {
+  const booking = await prisma.booking.findUniqueOrThrow({
+    where: { id: bookingId },
+  });
+
+  if (booking.customerId !== customerId) {
+    throw new Error("Forbidden! You can only cancel your own bookings.");
+  }
+
+  if (booking.status === "IN_PROGRESS" || booking.status === "COMPLETED") {
+    throw new Error(
+      "You cannot cancel a booking that is already in progress or completed!",
+    );
+  }
+
+  const result = await prisma.booking.update({
+    where: { id: bookingId },
+    data: { status: "CANCELLED" },
+  });
+  return result;
+};
+
 export const bookingService = {
   createNewBookingIntoDB,
   getMyBookingsFromDB,
   updateBookingStatusIntoDB,
+  getBookingByIdFromDB,
+  cancelBookingIntoDB,
 };
