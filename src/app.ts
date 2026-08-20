@@ -10,6 +10,7 @@ import { serviceRoutes } from "./modules/service/service.route";
 import { technicianRoutes } from "./modules/technician/technician.route";
 import { bookingRoutes } from "./modules/booking/booking.route";
 import { technicianBookingRoutes } from "./modules/booking/technicianBooking.Route";
+import { userRoutes } from "./modules/user/user.route";
 
 const app: Application = express();
 
@@ -45,6 +46,9 @@ app.use("/api/", bookingRoutes);
 
 // Technician Updte Route
 app.use("/api/technician/bookings/", technicianBookingRoutes);
+
+// Admin User status change Route
+app.use("/api/admin/users/", userRoutes);
 
 //  Not Found Route
 app.use(notFound);

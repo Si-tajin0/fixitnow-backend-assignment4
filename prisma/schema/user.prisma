@@ -1,14 +1,15 @@
 model User {
-  id        String   @id @default(uuid())
+  id        String     @id @default(uuid())
   name      String
-  email     String   @unique
+  email     String     @unique
   password  String
-  role      Role     @default(CUSTOMER)
+  role      Role       @default(CUSTOMER)
+  status    UserStatus @default(ACTIVE)
   phone     String?
   address   String?
-  rating    Float    @default(0.0)
-  creatdAt  DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  rating    Float      @default(0.0)
+  creatdAt  DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
   //Relation
   technicianProfile TecnicianProfile?

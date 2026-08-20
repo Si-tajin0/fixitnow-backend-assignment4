@@ -12,3 +12,8 @@ enum BookingStatus {
   COMPLETED
   DECLINED
 }
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+}
