@@ -6,9 +6,9 @@ import { notFound } from "./middlewares/notFound";
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import { authRoutes } from "./modules/auth/auth.routes";
 import { categoryRoutes } from "./modules/category/category.route";
+import { serviceRoutes } from "./modules/service/service.route";
 
 const app: Application = express();
-
 
 app.use(
   cors({
@@ -30,6 +30,9 @@ app.use("/api/auth/", authRoutes);
 
 //Admin Category Route
 app.use("/api/admin/", categoryRoutes);
+
+// Service Route
+app.use("/api/", serviceRoutes);
 
 //  Not Found Route
 app.use(notFound);

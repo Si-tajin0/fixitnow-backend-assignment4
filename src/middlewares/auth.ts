@@ -52,8 +52,6 @@ export const auth = (...requiredRoles: Role[]) => {
     if (!user) {
       throw new Error("user Not found. Please log in again");
     }
-    console.log("Token Role is:", role);
-    console.log("Required Roles are:", requiredRoles);
     req.user = {
       email,
       id,
