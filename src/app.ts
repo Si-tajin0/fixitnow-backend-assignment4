@@ -11,6 +11,7 @@ import { technicianRoutes } from "./modules/technician/technician.route";
 import { bookingRoutes } from "./modules/booking/booking.route";
 import { technicianBookingRoutes } from "./modules/booking/technicianBooking.Route";
 import { userRoutes } from "./modules/user/user.route";
+import { technicianProfileRoutes } from "./modules/technician/technicianProfile.route";
 
 const app: Application = express();
 
@@ -49,6 +50,9 @@ app.use("/api/technician/bookings/", technicianBookingRoutes);
 
 // Admin User status change Route
 app.use("/api/admin/users/", userRoutes);
+
+// Technician Profile Update & Availability update
+app.use("/api/technician/", technicianProfileRoutes);
 
 //  Not Found Route
 app.use(notFound);

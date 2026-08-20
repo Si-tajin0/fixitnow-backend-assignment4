@@ -11,9 +11,11 @@ const getAllTechniciansFromDB = async () => {
       name: true,
       email: true,
       role: true,
+      price: true,
       phone: true,
       address: true,
       rating: true,
+      experience: true,
       technicianProfile: true,
     },
   });
@@ -32,9 +34,11 @@ const getTechnicianByIdFromDB = async (id: string) => {
       name: true,
       email: true,
       role: true,
+      price: true,
       phone: true,
       address: true,
       rating: true,
+      experience: true,
       technicianProfile: true,
       servicesAsTech: {
         include: {
@@ -46,7 +50,30 @@ const getTechnicianByIdFromDB = async (id: string) => {
   return result;
 };
 
+// Update Technician Profile
+const updateTechnicianProfileIntoDB = async (userId: string, payload: any) => {
+  const result = await prisma.tecnicianProfile.update({
+    where: { userId },
+    data: payload,
+  });
+  return result;
+};
+
+// Technician Update Availability
+const updateAvailabilityIntoDB = async (
+  userId: string,
+  isAvailable: boolean,
+) => {
+  const result = await prisma.tecnicianProfile.update({
+    where: { userId },
+    data: { isAvailable },
+  });
+  return result;
+};
+
 export const technicianService = {
   getAllTechniciansFromDB,
   getTechnicianByIdFromDB,
+  updateTechnicianProfileIntoDB,
+  updateAvailabilityIntoDB,
 };

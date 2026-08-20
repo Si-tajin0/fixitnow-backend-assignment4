@@ -4,6 +4,8 @@ model TecnicianProfile {
   experience Int
   pricing    Float
 
+  isAvailable Boolean @default(true)
+
   // Relation Field
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
