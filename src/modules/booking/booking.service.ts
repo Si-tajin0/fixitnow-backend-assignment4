@@ -1,3 +1,4 @@
+import { BookingStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { TBookingPayload } from "./booking.interface";
 
@@ -57,7 +58,34 @@ const getMyBookingsFromDB = async (userId: string, role: string) => {
   return result;
 };
 
+// Update Technician Booking Status
+const updateBookingStatusIntoDB = async (
+  bookingId: string,
+  technicianId: string,
+  status: BookingStatus,
+) => {
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+  });
+
+  if (!booking) {
+    throw new Error("Booking not found!");
+  }
+
+  if (booking.technicianId !== technicianId) {
+    throw new Error("Forbidden! You are not authorized to update this booking");
+  }
+
+  const result = await prisma.booking.update({
+    where: { id: bookingId },
+    data: { status },
+  });
+
+  return result;
+};
+
 export const bookingService = {
   createNewBookingIntoDB,
   getMyBookingsFromDB,
+  updateBookingStatusIntoDB,
 };

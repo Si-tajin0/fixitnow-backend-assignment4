@@ -3,6 +3,7 @@ import { catchAsync } from "../../utitls/catchAsync";
 import { bookingService } from "./booking.service";
 import { sendResponse } from "../../utitls/sendResponse";
 import httpStatus from "http-status";
+import { BookingStatus } from "../../../generated/prisma/client";
 
 // Create Bookings
 const createBooking = catchAsync(async (req: Request, res: Response) => {
@@ -34,7 +35,28 @@ const getMyBookings = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// Technician Update Booking Status
+const updateBookingStatus = catchAsync(async (req: Request, res: Response) => {
+  const bookingId = req.params.id;
+  const status = req.body.status as BookingStatus;
+  const technicianId = req.user.id as string;
+
+  const result = await bookingService.updateBookingStatusIntoDB(
+    bookingId as string,
+    technicianId,
+    status,
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Booking status update successfully",
+    data: result,
+  });
+});
+
 export const bookingController = {
   createBooking,
   getMyBookings,
+  updateBookingStatus,
 };
