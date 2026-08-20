@@ -1,21 +1,36 @@
+import { Role } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 
 // Get All Technicians
-const getAllTechniciansFromDB = async () => {
+const getAllTechniciansFromDB = async (query: any) => {
+  const { searchTerm, location, minRating } = query;
+
+  const whereConditions: any = {
+    role: "TECHNICIAN",
+  };
+
+  if (searchTerm) {
+    whereConditions.name = { contains: searchTerm, mode: "insensetive" };
+  }
+
+  if (location) {
+    whereConditions.address = { contains: location, mode: "insensetive" };
+  }
+
+  if (minRating) {
+    whereConditions.rating = { gte: Number(minRating) };
+  }
+
   const result = await prisma.user.findMany({
-    where: {
-      role: "TECHNICIAN",
-    },
+    where: whereConditions,
     select: {
       id: true,
       name: true,
       email: true,
       role: true,
-      price: true,
       phone: true,
       address: true,
       rating: true,
-      experience: true,
       technicianProfile: true,
     },
   });
@@ -34,11 +49,9 @@ const getTechnicianByIdFromDB = async (id: string) => {
       name: true,
       email: true,
       role: true,
-      price: true,
       phone: true,
       address: true,
       rating: true,
-      experience: true,
       technicianProfile: true,
       servicesAsTech: {
         include: {
