@@ -12,6 +12,7 @@ import { bookingRoutes } from "./modules/booking/booking.route";
 import { technicianBookingRoutes } from "./modules/booking/technicianBooking.Route";
 import { userRoutes } from "./modules/user/user.route";
 import { technicianProfileRoutes } from "./modules/technician/technicianProfile.route";
+import { paymentRoutes } from "./modules/payment/payment.route";
 
 const app: Application = express();
 
@@ -31,10 +32,10 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 //Authentication Route
-app.use("/api/auth/", authRoutes);
+app.use("/api/auth", authRoutes);
 
 //Admin Category Route
-app.use("/api/admin/", categoryRoutes);
+app.use("/api/admin", categoryRoutes);
 
 // Service Route
 app.use("/api/", serviceRoutes);
@@ -43,16 +44,19 @@ app.use("/api/", serviceRoutes);
 app.use("/api/", technicianRoutes);
 
 // Booking Route
-app.use("/api/bookings", bookingRoutes);
+app.use("/api/bookings/", bookingRoutes);
 
 // Technician Updte Route
-app.use("/api/technician/bookings/", technicianBookingRoutes);
+app.use("/api/technician/bookings", technicianBookingRoutes);
 
 // Admin User status change Route
-app.use("/api/admin/users/", userRoutes);
+app.use("/api/admin/users", userRoutes);
 
 // Technician Profile Update & Availability update
-app.use("/api/technician/", technicianProfileRoutes);
+app.use("/api/technician", technicianProfileRoutes);
+
+// Stripe Payment Route
+app.use("/api/payments", paymentRoutes);
 
 //  Not Found Route
 app.use(notFound);
