@@ -98,7 +98,48 @@ const confirmPaymentIntoDB = async (transactionId: string) => {
   return result;
 };
 
+// Get Payment History
+const getMyPaymentHistoryFromDB = async (customerId: string) => {
+  const result = await prisma.payment.findMany({
+    where: {
+      booking: {
+        customerId: customerId,
+      },
+    },
+    include: {
+      booking: {
+        include: { service: true, technician: { select: { name: true } } },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+  return result;
+};
+
+// Get Payment By Id
+const getPaymentByIdFromDB = async (paymentId: string, customerId: string) => {
+  const payment = await prisma.payment.findUnique({
+    where: { id: paymentId },
+    include: {
+      booking: {
+        include: { service: true, technician: { select: { name: true } } },
+      },
+    },
+  });
+
+  if (!payment) {
+    throw new Error("payment not found");
+  }
+
+  if (payment.booking.customerId !== customerId) {
+    throw new Error("Forbidden! You can only view your own payments");
+  }
+  return payment;
+};
+
 export const paymentService = {
   createPaymentSessionIntoDB,
   confirmPaymentIntoDB,
+  getMyPaymentHistoryFromDB,
+  getPaymentByIdFromDB,
 };

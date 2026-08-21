@@ -36,7 +36,41 @@ const confirmPayment = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// Get All Payment
+const getMyPaymentHistory = catchAsync(async (req: Request, res: Response) => {
+  const customerId = req.user.id;
+
+  const result = await paymentService.getMyPaymentHistoryFromDB(customerId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Payment history retrieved successfully",
+    data: result,
+  });
+});
+
+// Get Payment by ID
+const getPaymentById = catchAsync(async (req: Request, res: Response) => {
+  const paymentId = req.params.id as string;
+  const customerId = req.user.id;
+
+  const result = await paymentService.getPaymentByIdFromDB(
+    paymentId,
+    customerId,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Payment details retrieved successfully",
+    data: result,
+  });
+});
+
 export const paymentController = {
   createPayment,
   confirmPayment,
+  getMyPaymentHistory,
+  getPaymentById,
 };
