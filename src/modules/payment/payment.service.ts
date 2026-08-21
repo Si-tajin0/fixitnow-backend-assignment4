@@ -2,6 +2,7 @@ import { prisma } from "../../lib/prisma";
 
 import { stripe } from "../../lib/stripe";
 
+// Create Payment
 const createPaymentSessionIntoDB = async (
   bookingId: string,
   customerId: string,
@@ -67,6 +68,37 @@ const createPaymentSessionIntoDB = async (
     payment,
   };
 };
+
+// Confirm Payment
+const confirmPaymentIntoDB = async (transactionId: string) => {
+  const payment = await prisma.payment.findUnique({
+    where: { transactionId },
+  });
+
+  if (!payment) {
+    throw new Error("Payment info not found");
+  }
+
+  if (payment.status === "COMPLETED") {
+    throw new Error("Payment is already verified and completed");
+  }
+
+  const result = await prisma.$transaction(async (tx) => {
+    const updatedPayment = await tx.payment.update({
+      where: { transactionId },
+      data: { status: "COMPLETED" },
+    });
+
+    await tx.booking.update({
+      where: { id: payment.bookingId },
+      data: { status: "PAID" },
+    });
+    return updatedPayment;
+  });
+  return result;
+};
+
 export const paymentService = {
   createPaymentSessionIntoDB,
+  confirmPaymentIntoDB,
 };
