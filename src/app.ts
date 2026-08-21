@@ -13,6 +13,7 @@ import { technicianBookingRoutes } from "./modules/booking/technicianBooking.Rou
 import { userRoutes } from "./modules/user/user.route";
 import { technicianProfileRoutes } from "./modules/technician/technicianProfile.route";
 import { paymentRoutes } from "./modules/payment/payment.route";
+import { reviewRoutes } from "./modules/review/review.route";
 
 const app: Application = express();
 
@@ -57,6 +58,9 @@ app.use("/api/technician", technicianProfileRoutes);
 
 // Stripe Payment Route
 app.use("/api/payments", paymentRoutes);
+
+// Review Route
+app.use("/api/reviews", reviewRoutes);
 
 //  Not Found Route
 app.use(notFound);

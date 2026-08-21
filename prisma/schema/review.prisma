@@ -1,0 +1,13 @@
+model Review {
+  id      String  @id @default(uuid())
+  rating  Float
+  comment String?
+
+  bookingId String  @unique
+  booking   Booking @relation(fields: [bookingId], references: [id])
+
+  customerId String
+  customer   User   @relation("CustomerReviews", fields: [customerId], references: [id])
+
+  @@map("reviews")
+}

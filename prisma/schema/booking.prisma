@@ -15,6 +15,8 @@ model Booking {
 
   payment Payment?
 
+  review Review?
+
   creatdAt  DateTime @default(now())
   updatedAt DateTime @updatedAt
 

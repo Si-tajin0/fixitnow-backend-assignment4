@@ -15,6 +15,8 @@ model User {
   technicianProfile TecnicianProfile?
   servicesAsTech    Service[]         @relation("TechnicianServices")
 
+  reviews Review[] @relation("CustomerReviews")
+
   bookingsAsCust Booking[] @relation("CustomerBookings")
   bookingsAsTeck Booking[] @relation("TechnicianBookings")
 
