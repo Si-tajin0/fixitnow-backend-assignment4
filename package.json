@@ -9,7 +9,7 @@
     "dev": "tsx watch src/server.ts",
     "build": "prisma generate",
     "vercel-build": "prisma generate",
-    "start": "node dist/server.js",
+    "start": "tsx src/server.js",
     "postinstall": "prisma generate"
   },
   "dependencies": {
