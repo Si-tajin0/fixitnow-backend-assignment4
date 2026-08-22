@@ -8,9 +8,8 @@
   "main": "server.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js",
-    "postinstall": "prisma generate"
+    "build": "prisma generate && tsc",
+    "start": "node dist/server.js"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
