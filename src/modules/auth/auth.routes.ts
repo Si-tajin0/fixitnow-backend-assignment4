@@ -1,13 +1,22 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router } from "express";
 import { authController } from "./auth.controller";
-import { Role } from "../../../generated/prisma/enums";
 import { auth } from "../../middlewares/auth";
+import { validateRequest } from "../../middlewares/validateRequest";
+import { authValidation } from "./auth.validation";
 
 const router = Router();
 
-router.post("/register", authController.registerUser);
+router.post(
+  "/register",
+  validateRequest(authValidation.registerValidationSchema),
+  authController.registerUser,
+);
 
-router.post("/login", authController.loginUser);
+router.post(
+  "/login",
+  validateRequest(authValidation.loginvalidationSchema),
+  authController.loginUser,
+);
 
 router.get(
   "/me",

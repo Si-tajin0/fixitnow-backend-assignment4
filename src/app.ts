@@ -36,16 +36,16 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/auth", authRoutes);
 
 //Admin Category Route
-app.use("/api/admin", categoryRoutes);
+app.use("/api", categoryRoutes);
 
 // Service Route
-app.use("/api/", serviceRoutes);
+app.use("/api", serviceRoutes);
 
 // Technician Route
-app.use("/api/", technicianRoutes);
+app.use("/api", technicianRoutes);
 
 // Booking Route
-app.use("/api/bookings/", bookingRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 // Technician Updte Route
 app.use("/api/technician/bookings", technicianBookingRoutes);

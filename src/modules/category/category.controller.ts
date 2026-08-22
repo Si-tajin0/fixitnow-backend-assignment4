@@ -3,7 +3,6 @@ import { catchAsync } from "../../utitls/catchAsync";
 import { categoryService } from "./category.service";
 import { sendResponse } from "../../utitls/sendResponse";
 import httpStatus from "http-status";
-import { setGlobalProxyFromEnv } from "node:http";
 
 // Create Category
 const createCategory = catchAsync(async (req: Request, res: Response) => {
@@ -29,7 +28,21 @@ const getAllCategories = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// Get Public Categories
+const getPublicAllCategories = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await categoryService.getAllCategoryIntoDB();
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Categories retrived successfully",
+      data: result,
+    });
+  },
+);
 export const categoryController = {
   createCategory,
   getAllCategories,
+  getPublicAllCategories,
 };

@@ -4,7 +4,7 @@ import { bookingController } from "./booking.controller";
 
 const router = Router();
 
-router.post("/bookings", auth("CUSTOMER"), bookingController.createBooking);
+router.post("/", auth("CUSTOMER"), bookingController.createBooking);
 
 router.get(
   "/",
