@@ -39,7 +39,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin/categories", categoryRoutes);
 
 // Service Route
-app.use("/api//services", serviceRoutes);
+app.use("/api/services", serviceRoutes);
 
 // Technician Route
 app.use("/api/technicians", technicianRoutes);
