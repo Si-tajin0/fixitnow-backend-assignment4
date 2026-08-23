@@ -36,7 +36,7 @@ const getAllServiceintoDB = async (query: any) => {
   if (searchTerm) {
     whereConditions.OR = [
       { name: { contains: searchTerm, mode: "insensitive" } },
-      { description: { conntains: searchTerm, mode: "insensitive" } },
+      { description: { contains: searchTerm, mode: "insensitive" } },
     ];
   }
 

@@ -8,7 +8,7 @@ router.post("/", auth("CUSTOMER"), bookingController.createBooking);
 
 router.get(
   "/",
-  auth("CUSTOMER", "TECHNICIAN"),
+  auth("CUSTOMER", "TECHNICIAN", "ADMIN"),
   bookingController.getMyBookings,
 );
 

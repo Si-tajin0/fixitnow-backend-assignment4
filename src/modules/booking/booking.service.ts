@@ -58,6 +58,19 @@ const getMyBookingsFromDB = async (userId: string, role: string) => {
   return result;
 };
 
+// Get All Booking For Admin
+const getAllBookingsForAdminFromDB = async () => {
+  const result = await prisma.booking.findMany({
+    include: {
+      customer: { select: { name: true, email: true, phone: true } },
+      technician: { select: { name: true, email: true, phone: true } },
+      service: true,
+    },
+    orderBy: { creatdAt: "desc" },
+  });
+  return result;
+};
+
 // Update Technician Booking Status
 const updateBookingStatusIntoDB = async (
   bookingId: string,
@@ -138,4 +151,5 @@ export const bookingService = {
   updateBookingStatusIntoDB,
   getBookingByIdFromDB,
   cancelBookingIntoDB,
+  getAllBookingsForAdminFromDB,
 };

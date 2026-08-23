@@ -35,6 +35,20 @@ const getMyBookings = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// Get All Booking Admin
+const getAllBookingsForAdmin = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await bookingService.getAllBookingsForAdminFromDB();
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "All bookings retrieved successfully",
+      data: result,
+    });
+  },
+);
+
 // Technician Update Booking Status
 const updateBookingStatus = catchAsync(async (req: Request, res: Response) => {
   const bookingId = req.params.id;

@@ -3,7 +3,7 @@ import { technicianController } from "./technician.controller";
 
 const router = Router();
 
-router.get("/technicians", technicianController.getAllTechnicians);
-router.get("/technicians/:id", technicianController.getTechnicianById);
+router.get("/", technicianController.getAllTechnicians);
+router.get("/:id", technicianController.getTechnicianById);
 
 export const technicianRoutes = router;

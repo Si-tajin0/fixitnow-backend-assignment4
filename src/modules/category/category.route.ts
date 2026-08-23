@@ -4,17 +4,9 @@ import { categoryController } from "./category.controller";
 
 const router = Router();
 
-router.post(
-  "/admin/categories",
-  auth("ADMIN"),
-  categoryController.createCategory,
-);
+router.post("/", auth("ADMIN"), categoryController.createCategory);
 
-router.get(
-  "/admin/categories",
-  auth("ADMIN"),
-  categoryController.getAllCategories,
-);
+router.get("/", auth("ADMIN"), categoryController.getAllCategories);
 
 router.get("/categories", categoryController.getPublicAllCategories);
 
