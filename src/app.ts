@@ -17,55 +17,55 @@ import { reviewRoutes } from "./modules/review/review.route";
 
 const app: Application = express();
 
-app.use(
-  cors({
-    origin: config.app_url,
-    credentials: true,
-  }),
-);
+// app.use(
+//   cors({
+//     origin: config.app_url,
+//     credentials: true,
+//   }),
+// );
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(cookieParser());
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-//Authentication Route
-app.use("/api/auth", authRoutes);
+// //Authentication Route
+// app.use("/api/auth", authRoutes);
 
-//Admin Category Route
-app.use("/api", categoryRoutes);
+// //Admin Category Route
+// app.use("/api", categoryRoutes);
 
-// Service Route
-app.use("/api", serviceRoutes);
+// // Service Route
+// app.use("/api", serviceRoutes);
 
-// Technician Route
-app.use("/api", technicianRoutes);
+// // Technician Route
+// app.use("/api", technicianRoutes);
 
-// Booking Route
-app.use("/api/bookings", bookingRoutes);
+// // Booking Route
+// app.use("/api/bookings", bookingRoutes);
 
-// Technician Updte Route
-app.use("/api/technician/bookings", technicianBookingRoutes);
+// // Technician Updte Route
+// app.use("/api/technician/bookings", technicianBookingRoutes);
 
-// Admin User status change Route
-app.use("/api/admin/users", userRoutes);
+// // Admin User status change Route
+// app.use("/api/admin/users", userRoutes);
 
-// Technician Profile Update & Availability update
-app.use("/api/technician", technicianProfileRoutes);
+// // Technician Profile Update & Availability update
+// app.use("/api/technician", technicianProfileRoutes);
 
-// Stripe Payment Route
-app.use("/api/payments", paymentRoutes);
+// // Stripe Payment Route
+// app.use("/api/payments", paymentRoutes);
 
-// Review Route
-app.use("/api/reviews", reviewRoutes);
+// // Review Route
+// app.use("/api/reviews", reviewRoutes);
 
-//  Not Found Route
-app.use(notFound);
+// //  Not Found Route
+// app.use(notFound);
 
-// Global Error Handler Route
-app.use(globalErrorHandler);
+// // Global Error Handler Route
+// app.use(globalErrorHandler);
 
 export default app;
