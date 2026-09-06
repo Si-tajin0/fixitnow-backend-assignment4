@@ -50,7 +50,8 @@ const createPaymentSessionIntoDB = async (
         quantity: 1,
       },
     ],
-    success_url: "http://localhost:3000/payment-success",
+    success_url:
+      "http://localhost:3000/payment-success?transactionId={CHECKOUT_SESSION_ID}",
     cancel_url: "http://localhost:3000/payment-cancel",
   });
 
