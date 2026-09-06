@@ -21,5 +21,5 @@ router.get(
 
 // Cancel Booking (Only Customer)
 
-router.patch("/:id/cancel", auth("CUSTOMER"), bookingController.cancelBooking);
+router.patch("/:id", auth("CUSTOMER"), bookingController.cancelBooking);
 export const bookingRoutes = router;
