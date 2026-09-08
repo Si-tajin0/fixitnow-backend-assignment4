@@ -9,8 +9,17 @@ const createPaymentSessionIntoDB = async (
 ) => {
   const booking = await prisma.booking.findUniqueOrThrow({
     where: { id: bookingId },
-    include: { service: true, customer: true },
+    include: {
+      service: true,
+      customer: true,
+      technician: {
+        include: {
+          technicianProfile: true,
+        },
+      },
+    },
   });
+  if (!booking) throw new Error("Booking not found!");
 
   // Only customer self booking
   if (booking.customerId !== customerId) {
@@ -21,7 +30,7 @@ const createPaymentSessionIntoDB = async (
   if (booking.status !== "ACCEPTED") {
     throw new Error("You can only pay for an ACCEPTED booking.");
   }
-  // Double Pament CHeck
+  // Double Payment CHeck
   const existingPayment = await prisma.payment.findUnique({
     where: { bookingId },
   });
@@ -30,6 +39,9 @@ const createPaymentSessionIntoDB = async (
       "Payment session is already created or completed for this booking.",
     );
   }
+
+  const finalPrice =
+    booking.technician.technicianProfile?.pricing || booking.service.price;
 
   // Checkout Session
   const session = await stripe.checkout.sessions.create({
@@ -45,7 +57,7 @@ const createPaymentSessionIntoDB = async (
             name: booking.service.name,
             description: `Payment for booking ID: ${booking.id}`,
           },
-          unit_amount: Math.round(booking.service.price * 100),
+          unit_amount: Math.round(finalPrice * 100),
         },
         quantity: 1,
       },
@@ -55,11 +67,11 @@ const createPaymentSessionIntoDB = async (
     cancel_url: "http://localhost:3000/payment-cancel",
   });
 
-  // Database payment save with PENDING Stauts
+  // Database payment save with PENDING Status
   const payment = await prisma.payment.create({
     data: {
       bookingId: booking.id,
-      amount: booking.service.price,
+      amount: finalPrice,
       transactionId: session.id,
       status: "PENDING",
     },
