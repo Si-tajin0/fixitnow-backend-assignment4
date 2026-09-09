@@ -18,7 +18,7 @@ const createReviewIntoDB = async (customerId: string, payload: any) => {
   }
 
   // Job not COMPLETED not review write
-  if (booking.status === "COMPLETED") {
+  if (booking.status !== "COMPLETED") {
     throw new Error("You can only leave a review after the job is COMPLETED");
   }
 
