@@ -58,6 +58,19 @@ const getTechnicianByIdFromDB = async (id: string) => {
           category: true,
         },
       },
+      bookingsAsTeck :{
+        where: {
+          review: {isNot: null}
+        },
+        select: {
+          review: true,
+          customer: {
+            select: {
+              name: true
+            }
+          }
+        }
+      }
     },
   });
   return result;
