@@ -58,7 +58,7 @@ const getTechnicianByIdFromDB = async (id: string) => {
           category: true,
         },
       },
-      bookingsAsTeck :{
+      bookingsAsTech :{
         where: {
           review: {isNot: null}
         },
