@@ -8,6 +8,6 @@ router.post("/", auth("ADMIN"), categoryController.createCategory);
 
 router.get("/", auth("ADMIN"), categoryController.getAllCategories);
 
-router.get("/categories", categoryController.getPublicAllCategories);
+router.get("/", categoryController.getPublicAllCategories);
 
 export const categoryRoutes = router;

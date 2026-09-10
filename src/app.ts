@@ -38,6 +38,9 @@ app.use("/api/auth", authRoutes);
 //Admin Category Route
 app.use("/api/admin/categories", categoryRoutes);
 
+// Get all public categories
+app.use("/api/categories", categoryRoutes);
+
 // Service Route
 app.use("/api/services", serviceRoutes);
 
@@ -50,7 +53,7 @@ app.use("/api/bookings", bookingRoutes);
 // Get Admin booking
 app.use("/api/admin/bookings", bookingRoutes);
 
-// Technician Updte Route
+// Technician Update Route
 app.use("/api/technician/bookings", technicianBookingRoutes);
 
 // Admin User status change Route
