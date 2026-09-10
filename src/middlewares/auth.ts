@@ -5,6 +5,7 @@ import { catchAsync } from "../utitls/catchAsync";
 import { jwtUtils } from "../utitls/jwt";
 import { prisma } from "../lib/prisma";
 import config from "../config";
+import httpStatus from "http-status";
 
 declare global {
   namespace Express {
@@ -16,6 +17,7 @@ declare global {
 
 export const auth = (...requiredRoles: Role[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    // ১. টোকেন রিসিভ করা
     const token = req.cookies.accessToken
       ? req.cookies.accessToken
       : req.headers.authorization?.startsWith("Bearer")
@@ -36,6 +38,7 @@ export const auth = (...requiredRoles: Role[]) => {
 
     const { email, name, id, role } = verifiedToken.data as JwtPayload;
 
+    // ৩. রোল চেক করা
     if (requiredRoles.length && !requiredRoles.includes(role)) {
       throw new Error(
         "Forbidden. You don't have permission to access this resource",
@@ -50,8 +53,19 @@ export const auth = (...requiredRoles: Role[]) => {
     });
 
     if (!user) {
-      throw new Error("user Not found. Please log in again");
+      return res.status(httpStatus.UNAUTHORIZED).json({
+        success: false,
+        message: "User not found! Please log in again.",
+      });
     }
+
+    if (user.status === "BLOCKED") {
+      return res.status(httpStatus.FORBIDDEN).json({
+        success: false,
+        message: "Forbidden! Your account is blocked by the admin.",
+      });
+    }
+
     req.user = {
       email,
       id,

@@ -74,11 +74,22 @@ const registerFormDB = async (payload: RegisterCustomerPayload) => {
 // Create Login User
 const loginFromDB = async (payload: TLoginCustomer) => {
   // check if the user is in the database.
-  const user = await prisma.user.findUniqueOrThrow({
+  const user = await prisma.user.findUnique({
     where: {
       email: payload.email,
     },
   });
+
+  if (!user) {
+    throw new Error("User not found! Please register first.");
+  }
+
+  // status checked
+  if (user.status === "BLOCKED") {
+    throw new Error(
+      "Your account has been blocked by the admin. Please contact support.",
+    );
+  }
 
   // Check Password
 
