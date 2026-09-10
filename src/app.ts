@@ -14,6 +14,7 @@ import { userRoutes } from "./modules/user/user.route";
 import { technicianProfileRoutes } from "./modules/technician/technicianProfile.route";
 import { paymentRoutes } from "./modules/payment/payment.route";
 import { reviewRoutes } from "./modules/review/review.route";
+import { publicCategoryRoutes } from "./modules/category/publicCategory.route";
 
 const app: Application = express();
 
@@ -39,7 +40,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin/categories", categoryRoutes);
 
 // Get all public categories
-app.use("/api/categories", categoryRoutes);
+app.use("/api/categories", publicCategoryRoutes);
 
 // Service Route
 app.use("/api/services", serviceRoutes);
