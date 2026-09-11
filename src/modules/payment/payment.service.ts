@@ -63,8 +63,8 @@ const createPaymentSessionIntoDB = async (
       },
     ],
     success_url:
-      "http://localhost:3000/payment-success?transactionId={CHECKOUT_SESSION_ID}",
-    cancel_url: "http://localhost:3000/payment-cancel",
+      "https://fixitnow-frontend-rose.vercel.app/payment-success?transactionId={CHECKOUT_SESSION_ID}",
+    cancel_url: "https://fixitnow-frontend-rose.vercel.app/payment-cancel",
   });
 
   // Database payment save with PENDING Status
